@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Milk Collection</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        .data-table td { padding: 16px 20px; font-size: 0.875rem; color: #475569; border-bottom: 1px solid #F1F5F9; }
+        .data-table tr:hover td { background-color: #F8FAFC; }
+        .data-table td:first-child { font-weight: 600; color: #1E293B; }
+    </style>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner">
+                <img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain"> 
+            </div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+       <nav class="mt-6 px-4 space-y-2 flex-1">
+             <a href="collection.html" class="flex items-center px-4 py-3 bg-blue-900 text-[#febd69] font-semibold rounded-lg border-l-4 border-[#febd69]">
+                <i class="fa-solid fa-flask w-6 text-center"></i> <span class="font-medium" data-translate="navCollection">Milk Collection</span>
+            </a>
+             <a href="collectionFarmers.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-[#febd69] rounded-lg transition-colors">
+                <i class="fa-solid fa-users w-6 text-center"></i> <span data-translate="navFarmers">Farmer Mgt</span>
+            </a>
+            <a href="collection_reports.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-[#febd69] rounded-lg transition-colors">
+                <i class="fa-solid fa-chart-line w-6 text-center"></i> <span class="font-medium" data-translate="navReports">Report & Analysis</span>
+            </a>
+            <a href="collection_support.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-[#febd69] rounded-lg transition-colors">
+                <i class="fa-solid fa-headset w-6 text-center"></i> <span class="font-medium" data-translate="navSupport">Support</span>
+            </a>
+            <a href="collection_settings.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-[#febd69] rounded-lg transition-colors">
+                <i class="fa-solid fa-gear w-6 text-center"></i> <span class="font-medium" data-translate="navSettings">Settings</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-white/10 bg-black/5">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg">
+                <i class="fas fa-sign-out-alt"></i> <span data-translate="btnLogout">Secure Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0 sticky top-0">
+            <div class="flex items-center gap-4">
+                <div class="w-1 h-8 bg-[#1565C0] rounded-full hidden sm:block"></div>
+                <h1 class="text-lg font-bold text-[#1565C0] italic tracking-tight hidden sm:block" data-translate="companyName">Washishti Milk & Milk Products</h1>
+            </div>
+            
+            <div class="flex items-center gap-4 sm:gap-6">
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-[#1565C0] outline-none font-medium cursor-pointer shadow-sm p-2">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                </select>
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-4 sm:pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-translate="roleText">Operator</p>
+                        <p class="text-sm font-bold text-slate-700" id="header-username">Center #42</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full max-w-[1600px] mx-auto">
+            <div class="bg-white rounded-xl p-5 sm:p-6 border border-slate-200 shadow-sm flex justify-between sm:items-center mb-6 border-l-4 border-l-[#febd69]">
+                <div>
+                    <h2 class="text-xl font-bold text-[#1565C0]" data-translate="portalTitle">Operator Portal</h2>
+                    <p class="text-sm text-slate-500 mt-1 font-medium"><i class="far fa-calendar-alt mr-1"></i> <span id="current-date">Today's Shift</span></p>
+                </div>
+                <div class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-100 flex items-center gap-2">
+                    <span class="text-sm font-bold text-slate-600 uppercase" data-translate="shift">Shift:</span>
+                    <select id="shift-select" class="bg-transparent font-extrabold text-[#febd69] tracking-wide outline-none cursor-pointer">
+                        <option value="Morning">MORNING</option>
+                        <option value="Evening">EVENING</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-10">
+                <div class="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-max">
+                    <div class="bg-slate-50 p-5 border-b border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-edit text-[#1565C0]"></i> <span data-translate="enterDeposit">Enter Milk Deposit</span></h3>
+                    </div>
+                    
+                    <div class="p-6">
+                        <form id="collection-form" class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-translate="farmerId">Farmer Username</label>
+                                <input type="text" id="farmerId" placeholder="e.g. F01-Chinch" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none p-3 text-sm transition-all shadow-sm">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2" data-translate="milkType">Milk Type</label>
+                                    <select id="milkType" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none p-3 text-sm transition-all shadow-sm">
+                                        <option value="Cow">Cow</option>
+                                        <option value="Buffalo">Buffalo</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2" data-translate="qty">Quantity (Ltr)</label>
+                                    <input type="number" id="quantity" step="0.1" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none p-3 text-sm transition-all">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2" data-translate="fat">FAT %</label>
+                                    <input type="number" id="fat" step="0.1" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none p-3 text-sm transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2" data-translate="snf">SNF %</label>
+                                    <input type="number" id="snf" step="0.1" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none p-3 text-sm transition-all">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-translate="rate">Rate / Ltr (₹)</label>
+                                    <input type="number" id="rate" step="0.01" required class="w-full bg-blue-50 border border-blue-200 text-[#1565C0] font-bold rounded-xl outline-none p-3 text-sm shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-translate="totalAmount">Total Amount (₹)</label>
+                                    <input type="text" id="totalAmount" readonly value="0.00" class="w-full bg-green-50 border border-green-200 text-green-700 font-bold rounded-xl outline-none p-3 text-sm shadow-sm cursor-not-allowed">
+                                </div>
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="w-full mt-4 bg-[#2E7D32] hover:bg-[#1b4b1e] text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-lg flex justify-center items-center gap-2 uppercase tracking-wide text-sm">
+                                <i class="fas fa-save"></i> <span data-translate="saveEntry">Save Entry</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[600px] overflow-hidden">
+                    <div class="bg-slate-50 p-5 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-list-alt text-[#febd69]"></i> <span data-translate="todayCollections">Today's Collections</span></h3>
+                        <span class="bg-blue-100 text-[#1565C0] text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-sync-alt mr-1"></i> Live</span>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto">
+                        <table class="w-full text-left border-collapse data-table">
+                            <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b" data-translate="farmer">Farmer</th>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b" data-translate="type">Type</th>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b" data-translate="qtyCol">Qty (L)</th>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b">FAT/SNF</th>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b" data-translate="rateCol">Rate</th>
+                                    <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase border-b text-right" data-translate="totalCol">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-entries" class="divide-y divide-slate-100">
+                                <tr><td colspan="6" class="py-10 text-center text-slate-400 font-medium"><i class="fas fa-spinner fa-spin mr-2"></i>Loading records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('header-username').innerText = localStorage.getItem("username") || "Center Operator";
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        fetchRecentEntries();
+    });
+
+    const qtyInput = document.getElementById('quantity');
+    const rateInput = document.getElementById('rate');
+    const totalInput = document.getElementById('totalAmount');
+
+    function calculateTotal() {
+        const qty = parseFloat(qtyInput.value) || 0;
+        const rate = parseFloat(rateInput.value) || 0;
+        totalInput.value = (qty * rate).toFixed(2);
+    }
+
+    qtyInput.addEventListener('input', calculateTotal);
+    rateInput.addEventListener('input', calculateTotal);
+
+    function fetchRecentEntries() {
+        fetch('https://washishti-api.onrender.com/api/collections')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('recent-entries');
+            tbody.innerHTML = ''; 
+            if(!data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-400">No collections found.</td></tr>`;
+                return;
+            }
+
+            data.forEach(entry => {
+                const badgeClass = entry.milkType === 'Cow' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${entry.farmerId}</td>
+                        <td><span class="border px-2.5 py-1 rounded-md text-[11px] font-bold uppercase ${badgeClass}">${entry.milkType}</span></td>
+                        <td class="font-medium">${entry.quantityLiters}</td>
+                        <td class="text-slate-500">${entry.fatPercentage}% / ${entry.snfPercentage}%</td>
+                        <td class="text-slate-500">₹${entry.ratePerLiter}</td>
+                        <td class="text-right text-green-600 font-bold">₹${entry.totalAmount}</td>
+                    </tr>`;
+            });
+        }).catch(e => console.log("Fetch Error:", e));
+    }
+
+    document.getElementById("collection-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('submitBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        btn.disabled = true;
+
+        const data = {
+            farmerId: document.getElementById('farmerId').value.trim(),
+            milkType: document.getElementById('milkType').value,
+            shift: document.getElementById('shift-select').value,
+            quantityLiters: parseFloat(qtyInput.value),
+            fatPercentage: parseFloat(document.getElementById('fat').value),
+            snfPercentage: parseFloat(document.getElementById('snf').value),
+            ratePerLiter: parseFloat(rateInput.value),
+            totalAmount: parseFloat(totalInput.value)
+        };
+
+        try {
+            const response = await fetch('https://washishti-api.onrender.com/api/collections/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Milk Entry Saved Successfully!");
+                document.getElementById("collection-form").reset(); 
+                totalInput.value = "0.00";
+                fetchRecentEntries(); 
+            } else {
+                const err = await response.json();
+                alert("Error: " + (err.message || "Failed to save entry."));
+            }
+        } catch (error) {
+            alert("Server offline. Please ensure Spring Boot is running on port 8080.");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    function logout() {
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+    }
+
+    // ==========================================
+    // TRANSLATION LOGIC
+    // ==========================================
+    const translations = {
+        "en": {
+            companyName: "Washishti Milk & Milk Products",
+            portalTitle: "Operator Portal",
+            shift: "Shift:",
+            enterDeposit: "Enter Milk Deposit",
+            farmerId: "Farmer Username",
+            milkType: "Milk Type",
+            qty: "Quantity (Ltr)",
+            fat: "FAT %",
+            snf: "SNF %",
+            rate: "Rate / Ltr (₹)",
+            totalAmount: "Total Amount (₹)",
+            saveEntry: "Save Entry",
+            todayCollections: "Today's Collections",
+            farmer: "Farmer",
+            type: "Type",
+            qtyCol: "Qty (L)",
+            rateCol: "Rate",
+            totalCol: "Total",
+            navCollection: "Milk Collection",
+            navFarmers: "Farmer Mgt",
+            navReports: "Report & Analysis",
+            navSupport: "Support",
+            navSettings: "Settings",
+            btnLogout: "Secure Logout",
+            roleText: "Operator"
+        },
+        "mr": {
+            companyName: "वाशिष्ठी दूध आणि दुग्धजन्य पदार्थ",
+            portalTitle: "ऑपरेटर पोर्टल",
+            shift: "शिफ्ट:",
+            enterDeposit: "दूध जमा करा",
+            farmerId: "शेतकरी युझरनेम",
+            milkType: "दुधाचा प्रकार",
+            qty: "प्रमाण (लिटर)",
+            fat: "फॅट %",
+            snf: "एसएनएफ %",
+            rate: "दर / लिटर (₹)",
+            totalAmount: "एकूण रक्कम (₹)",
+            saveEntry: "नोंद जतन करा",
+            todayCollections: "आजचे संकलन",
+            farmer: "शेतकरी",
+            type: "प्रकार",
+            qtyCol: "प्रमाण (L)",
+            rateCol: "दर",
+            totalCol: "एकूण",
+            navCollection: "दूध संकलन",
+            navFarmers: "शेतकरी व्यवस्थापन",
+            navReports: "अहवाल आणि विश्लेषण",
+            navSupport: "समर्थन",
+            navSettings: "सेटिंग्ज",
+            btnLogout: "सुरक्षित लॉगआउट",
+            roleText: "ऑपरेटर"
+        }
+    };
+
+    document.getElementById('language-toggle').addEventListener('change', function(e) {
+        const lang = e.target.value;
+        
+        // Translate all elements with [data-translate] attribute
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if (translations[lang] && translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
+
+        // Translate placeholders manually if needed
+        const farmerInput = document.getElementById('farmerId');
+        if (lang === 'mr') {
+            farmerInput.placeholder = "उदा. F01-Chinch";
+        } else {
+            farmerInput.placeholder = "e.g. F01-Chinch";
+        }
+
+        // Re-run the fetch to refresh table headers or empty state messages if applicable
+        fetchRecentEntries();
+    });
+</script>
+</body>
+</html>

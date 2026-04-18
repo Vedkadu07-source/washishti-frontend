@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#1565C0',
+                        brandOrange: '#febd69',
+                        bgGray: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bgGray font-sans antialiased text-gray-800 flex h-screen overflow-hidden">
+
+    <div class="md:hidden bg-gray-900 text-white p-4 flex justify-between items-center shadow-md fixed w-full z-50">
+        <div class="text-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-cow text-brandOrange"></i> Washishti Dairy
+        </div>
+        <button id="mobile-menu-btn" class="text-white hover:text-brandOrange focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+    </div>
+
+     <aside class="w-64 bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner">
+                <img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain" onerror="this.src='https://placehold.co/40x40?text=W'"> 
+            </div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2">
+            <a href="franchise.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-boxes-stacked w-6"></i> <span data-i18n="bulk_orders">Bulk Orders</span>
+            </a>
+            <a href="FranchiseHistory.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-clock-rotate-left w-6"></i> <span data-i18n="my_orders">My Orders</span>
+            </a>
+            <a href="FranchiseReports.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-chart-pie w-6"></i> <span data-i18n="reports">Report & Analysis</span>
+            </a>
+            <a href="FranchiseSupport.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-headset w-6"></i> <span data-i18n="support">Support</span>
+            </a>
+            <a href="FranchiseSettings.html" class="flex items-center px-4 py-3 bg-blue-900 text-brandOrange font-semibold rounded-lg border-l-4 border-brandOrange">
+                <i class="fa-solid fa-gear w-6"></i> <span data-i18n="settings">Settings</span>
+            </a>
+        </nav>
+
+        <div class="p-4 mt-auto border-t border-gray-800 bg-black/10">
+            <button onclick="localStorage.removeItem('username'); window.location.href='login.html';" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-red-500/30">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> 
+                <span data-i18n="secure_logout">Secure Logout</span>
+            </button>
+            <p class="text-center text-xs text-gray-500 mt-5 mb-2">©️ 2026 Washishti</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative pt-16 md:pt-0">
+        
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900" data-i18n="settings">Settings</h1>
+                <p class="text-gray-500 text-sm mt-1 hidden sm:block" data-i18n="settings_desc">Manage your franchise profile and security preferences.</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="relative flex items-center gap-2 mr-2 border-r pr-4 border-gray-300">
+                    <i class="fa-solid fa-language text-brandBlue text-xl"></i>
+                    <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-transparent text-sm font-semibold text-gray-700 focus:outline-none cursor-pointer">
+                        <option value="en">English</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                </div>
+
+                <div class="bg-gray-50 p-2 rounded-full border border-gray-200">
+                    <i class="fa-regular fa-bell text-gray-600 hover:text-brandBlue cursor-pointer px-2"></i>
+                </div>
+                <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-full border border-gray-200 shadow-sm cursor-pointer hover:shadow transition-shadow">
+                    <div class="w-8 h-8 rounded-full bg-brandBlue text-white flex items-center justify-center font-bold text-sm">F</div>
+                    <span class="font-medium text-sm hidden sm:block" id="header-username">Franchise Account</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 lg:p-10 w-full pb-20">
+            
+            <div class="max-w-5xl mx-auto space-y-6">
+                
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
+                    <h2 class="text-xl font-bold text-gray-800 border-b pb-4 mb-6" data-i18n="profile_details">Franchise Profile</h2>
+                    
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex flex-col items-center space-y-4 w-full md:w-1/4 border-r border-gray-100 pr-4">
+                            <div class="w-32 h-32 bg-blue-50 rounded-full border-4 border-blue-100 flex items-center justify-center text-brandBlue text-5xl shadow-sm relative group cursor-pointer overflow-hidden">
+                                <i class="fa-solid fa-store group-hover:opacity-30 transition-opacity"></i>
+                                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i class="fa-solid fa-camera text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <button class="text-sm text-brandBlue font-semibold hover:underline" data-i18n="change_logo">Change Logo</button>
+                            <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-check-circle mr-1"></i> Verified</span>
+                        </div>
+
+                        <form class="w-full md:w-3/4 space-y-5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="franchise_name">Franchise Account ID</label>
+                                    <input type="text" id="profile-name" disabled class="w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-xl outline-none text-gray-500 cursor-not-allowed">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="owner_name">Owner Name</label>
+                                    <input type="text" placeholder="Enter owner name" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none text-gray-800">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="contact_no">Contact Number</label>
+                                    <input type="text" id="profile-mobile" placeholder="Enter mobile number" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none text-gray-800">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="email_address">Email Address</label>
+                                    <input type="email" placeholder="contact@agency.com" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none text-gray-800">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="store_address">Store Address</label>
+                                    <textarea rows="2" id="profile-address" placeholder="Enter full store address" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none text-gray-800 resize-none"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 flex justify-end">
+                                <button type="button" id="updateProfileBtn" class="bg-brandBlue hover:bg-blue-800 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md transform hover:-translate-y-0.5" data-i18n="update_profile">
+                                    Update Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-center gap-3 border-b pb-4 mb-6">
+                            <i class="fa-solid fa-shield-halved text-2xl text-brandBlue"></i>
+                            <h2 class="text-xl font-bold text-gray-800" data-i18n="security">Account Security</h2>
+                        </div>
+                        
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="current_pwd">Current Password</label>
+                                <input type="password" id="current-pwd" placeholder="••••••••" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="new_pwd">New Password</label>
+                                <input type="password" id="new-pwd" placeholder="••••••••" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1" data-i18n="confirm_pwd">Confirm New Password</label>
+                                <input type="password" id="confirm-pwd" placeholder="••••••••" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-brandBlue focus:ring-2 focus:ring-blue-100 transition-all outline-none">
+                            </div>
+                            <div class="pt-2">
+                                <button type="button" id="updatePwdBtn" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow-md" data-i18n="update_pwd">
+                                    Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-center gap-3 border-b pb-4 mb-6">
+                            <i class="fa-solid fa-sliders text-2xl text-brandOrange"></i>
+                            <h2 class="text-xl font-bold text-gray-800" data-i18n="preferences">Preferences</h2>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800" data-i18n="email_notifications">Email Notifications</h4>
+                                    <p class="text-xs text-gray-500" data-i18n="email_desc">Receive order invoices and daily summaries via email.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandBlue"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800" data-i18n="sms_alerts">SMS Alerts</h4>
+                                    <p class="text-xs text-gray-500" data-i18n="sms_desc">Get SMS alerts when bulk orders are dispatched.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandBlue"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800" data-i18n="auto_pay">Auto-Payment Reminders</h4>
+                                    <p class="text-xs text-gray-500" data-i18n="auto_pay_desc">Automatically notify customers about pending dues.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandBlue"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // BACKEND FETCH & UPDATE LOGIC
+        document.addEventListener("DOMContentLoaded", async () => {
+            const username = localStorage.getItem("username") || "Franchise";
+            document.getElementById("header-username").innerText = username;
+            document.getElementById("profile-name").value = username;
+
+            try {
+                const res = await fetch(`https://washishti-api.onrender.com/api/users/${username}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if(data.mobile) document.getElementById('profile-mobile').value = data.mobile;
+                    if(data.address) document.getElementById('profile-address').value = data.address;
+                }
+            } catch(e) {
+                console.error("Failed to load user profile", e);
+            }
+        });
+
+        // Profile Update
+        document.getElementById('updateProfileBtn').addEventListener('click', async function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            btn.disabled = true;
+
+            const updateData = {
+                username: localStorage.getItem("username"),
+                mobile: document.getElementById('profile-mobile').value,
+                address: document.getElementById('profile-address').value
+            };
+
+            try {
+                const response = await fetch('https://washishti-api.onrender.com/api/users/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (response.ok) {
+                    alert("Profile updated successfully!");
+                } else {
+                    alert("Failed to update profile.");
+                }
+            } catch(error) {
+                alert("Server error. Cannot update profile.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Password Update Logic
+        document.getElementById('updatePwdBtn').addEventListener('click', async function() {
+            const currentPwd = document.getElementById('current-pwd').value;
+            const newPwd = document.getElementById('new-pwd').value;
+            const confirmPwd = document.getElementById('confirm-pwd').value;
+
+            if (!newPwd || !confirmPwd) {
+                alert("Please enter a new password.");
+                return;
+            }
+            if (newPwd !== confirmPwd) {
+                alert("New passwords do not match!");
+                return;
+            }
+
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            btn.disabled = true;
+
+            const updateData = {
+                username: localStorage.getItem("username"),
+                password: newPwd 
+            };
+
+            try {
+                const response = await fetch('https://washishti-api.onrender.com/api/users/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (response.ok) {
+                    alert("Password updated successfully!");
+                    document.getElementById('current-pwd').value = '';
+                    document.getElementById('new-pwd').value = '';
+                    document.getElementById('confirm-pwd').value = '';
+                } else {
+                    alert("Failed to update password.");
+                }
+            } catch(error) {
+                console.error(error);
+                alert("Server error. Cannot update password.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Mobile Sidebar Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        if(sidebar && btn) {
+            btn.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
+
+        // English & Marathi Dictionary
+        const translations = {
+            en: {
+                "bulk_orders": "Bulk Orders",
+                "my_orders": "My Orders", 
+                "reports": "Report & Analysis", 
+                "support": "Support", 
+                "settings": "Settings",
+                "settings_desc": "Manage your franchise profile and security preferences.",
+                "secure_logout": "Secure Logout",
+                "profile_details": "Franchise Profile",
+                "change_logo": "Change Logo",
+                "franchise_name": "Franchise Account ID",
+                "owner_name": "Owner Name",
+                "contact_no": "Contact Number",
+                "email_address": "Email Address",
+                "store_address": "Store Address",
+                "update_profile": "Update Profile",
+                "security": "Account Security",
+                "current_pwd": "Current Password",
+                "new_pwd": "New Password",
+                "confirm_pwd": "Confirm New Password",
+                "update_pwd": "Update Password",
+                "preferences": "Preferences",
+                "email_notifications": "Email Notifications",
+                "email_desc": "Receive order invoices and daily summaries via email.",
+                "sms_alerts": "SMS Alerts",
+                "sms_desc": "Get SMS alerts when bulk orders are dispatched.",
+                "auto_pay": "Auto-Payment Reminders",
+                "auto_pay_desc": "Automatically notify customers about pending dues."
+            },
+            mr: {
+                "bulk_orders": "घाऊक ऑर्डर्स",
+                "my_orders": "माझ्या ऑर्डर्स", 
+                "reports": "अहवाल आणि विश्लेषण", 
+                "support": "समर्थन", 
+                "settings": "सेटिंग्ज",
+                "settings_desc": "तुमची फ्रेंचायझी प्रोफाइल आणि सुरक्षा प्राधान्ये व्यवस्थापित करा.",
+                "secure_logout": "सुरक्षित लॉगआउट",
+                "profile_details": "फ्रेंचायझी प्रोफाइल",
+                "change_logo": "लोगो बदला",
+                "franchise_name": "फ्रेंचायझी खाते आयडी",
+                "owner_name": "मालकाचे नाव",
+                "contact_no": "संपर्क क्रमांक",
+                "email_address": "ईमेल पत्ता",
+                "store_address": "दुकानाचा पत्ता",
+                "update_profile": "प्रोफाइल अद्यतनित करा",
+                "security": "खाते सुरक्षा",
+                "current_pwd": "सध्याचा पासवर्ड",
+                "new_pwd": "नवीन पासवर्ड",
+                "confirm_pwd": "नवीन पासवर्डची पुष्टी करा",
+                "update_pwd": "पासवर्ड अद्यतनित करा",
+                "preferences": "प्राधान्ये",
+                "email_notifications": "ईमेल सूचना",
+                "email_desc": "ईमेलद्वारे ऑर्डर इन्व्हॉइस आणि दैनंदिन गोषवारा प्राप्त करा.",
+                "sms_alerts": "एसएमएस अलर्ट",
+                "sms_desc": "घाऊक ऑर्डर्स पाठवल्या गेल्यावर एसएमएस अलर्ट मिळवा.",
+                "auto_pay": "ऑटो-पेमेंट स्मरणपत्रे",
+                "auto_pay_desc": "प्रलंबित बाकीबद्दल ग्राहकांना स्वयंचलितपणे सूचित करा."
+            }
+        };
+
+        // Language Switcher Function
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.innerText = translations[lang][key];
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

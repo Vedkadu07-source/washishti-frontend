@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Farmer Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#1565C0',
+                        brandOrange: '#febd69',
+                        bgGray: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        .data-table td { padding: 16px 20px; font-size: 0.875rem; color: #475569; border-bottom: 1px solid #F1F5F9; transition: background-color 0.2s; }
+        .data-table tr:hover td { background-color: #F8FAFC; cursor: default; }
+    </style>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gradient-to-b from-brandBlue to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner">
+                <img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain" onerror="this.src='https://placehold.co/40x40?text=W'"> 
+            </div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2 flex-1 overflow-y-auto">
+            <p class="px-4 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2 mt-4" data-translate="menuSection">Farmer Menu</p>
+            
+            <a href="Farmers.html">
+                <i class="fa-solid fa-clock-rotate-left w-6 text-center"></i> <span data-translate="navDashboard">Milk History</span>
+            </a>
+            
+            <a href="farmer_profile.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-user-tractor w-6 text-center"></i> <span data-translate="navProfile">Farmer Profile</span>
+            </a>
+            
+          
+            
+            <a href="farmer_reports.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-file-invoice-dollar w-6 text-center"></i> <span data-translate="navPayments">Reports & Analytics</span>
+            </a>
+            <a href="farmer_settings.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-gear w-6 text-center"></i> <span data-translate="navSettings">Settings</span>
+            </a>
+            <a href="farmer_support.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors">
+                <i class="fa-solid fa-life-ring w-6 text-center"></i> <span data-translate="navSupport">Support</span>
+            </a>
+        </nav>
+
+        <div class="p-4 mt-auto border-t border-white/10 bg-black/5">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-bold transition-all shadow-md hover:-translate-y-0.5">
+                <i class="fas fa-sign-out-alt"></i> <span data-translate="btnLogout">Logout</span>
+            </button>
+            <p class="text-center text-xs text-white/50 mt-5 mb-2">&copy; 2026 Washishti</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0 sticky top-0">
+            <div class="flex items-center gap-4 flex-1">
+                <div class="w-1 h-8 bg-brandBlue rounded-full hidden sm:block"></div>
+                <h1 class="text-xl font-bold text-brandBlue italic tracking-tight hidden sm:block" data-translate="companyName">Washishti Milk & Milk Products Pvt. Ltd.</h1>
+                <button class="md:hidden text-slate-500 text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
+            
+            <div class="flex items-center justify-end gap-4 sm:gap-6 flex-1">
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brandBlue outline-none font-medium cursor-pointer shadow-sm p-2">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                </select>
+                
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-4 sm:pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-translate="roleText">Farmer</p>
+                        <p class="text-sm font-bold text-brandBlue" id="header-username">User</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-brandBlue shadow-sm">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full max-w-[1200px] mx-auto pb-20">
+            
+            <div class="bg-white rounded-2xl p-6 border-y border-r border-l-4 border-l-brandOrange border-y-slate-200 border-r-slate-200 shadow-sm mb-6 transition-transform hover:-translate-y-1">
+                <h1 class="text-2xl font-bold text-brandBlue" id="welcome-message">Welcome!</h1>
+                <p class="text-sm text-slate-500 mt-1 font-medium" data-translate="welcomeSub">Here is your personal milk supply summary.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-2xl p-6 border-y border-r border-l-4 border-l-brandBlue border-y-slate-200 border-r-slate-200 shadow-sm flex items-center gap-5 transition-transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-blue-50 text-brandBlue flex items-center justify-center text-2xl border border-blue-100">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1" data-translate="totalMilkLabel">Total Milk Supplied</h3>
+                        <p class="text-3xl font-black text-slate-800" id="total-milk">0.0 <span class="text-sm font-medium text-gray-400">Ltr</span></p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 border-y border-r border-l-4 border-l-green-500 border-y-slate-200 border-r-slate-200 shadow-sm flex items-center gap-5 transition-transform hover:-translate-y-1">
+                    <div class="w-14 h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-2xl border border-green-100">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1" data-translate="totalEarningsLabel">Total Earnings</h3>
+                        <p class="text-3xl font-black text-slate-800" id="total-money">₹ 0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
+                    <div class="bg-blue-50 p-2.5 rounded-lg text-brandBlue"><i class="fas fa-history"></i></div>
+                    <h2 class="text-lg font-bold text-slate-800" data-translate="historyTitle">My Deposit History</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse data-table">
+                        <thead class="bg-white sticky top-0 z-10 shadow-sm border-b border-slate-200">
+                            <tr>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider" data-translate="colDate">Date</th>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider" data-translate="colType">Milk Type</th>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider" data-translate="colQty">Quantity (L)</th>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider">FAT / SNF</th>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider" data-translate="colRate">Rate (₹)</th>
+                                <th class="py-4 px-5 font-bold text-xs text-slate-400 uppercase tracking-wider text-right" data-translate="colTotal">Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="farmer-entries" class="divide-y divide-slate-100">
+                            <tr><td colspan="6" class="py-10 text-center text-slate-400 font-medium"><i class="fas fa-spinner fa-spin mr-2"></i> Loading your records...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const username = localStorage.getItem("loggedInUser") || "Guest";
+            document.getElementById('header-username').innerText = username;
+
+            // Fetch data from Java Server
+            fetch(`https://washishti-api.onrender.com/api/collections/farmer/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('farmer-entries');
+                tbody.innerHTML = ''; 
+
+                let totalLiters = 0;
+                let totalEarnings = 0;
+
+                data.forEach(entry => {
+                    const dateObj = new Date(entry.collectionDate);
+                    const dateString = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                    const badgeClass = entry.milkType === 'Cow' ? 'bg-blue-50 text-brandBlue border-blue-200' : 'bg-orange-50 text-brandOrange border-orange-200';
+
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td class="font-bold text-slate-700">${dateString}</td>
+                        <td><span class="border px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${badgeClass}">${entry.milkType}</span></td>
+                        <td class="font-bold text-slate-800">${entry.quantity} L</td>
+                        <td class="text-slate-500">${entry.fat} / ${entry.snf}</td>
+                        <td class="text-slate-500">₹ ${entry.rate}</td>
+                        <td class="text-right text-green-600 font-black text-base">₹ ${entry.totalAmount}</td>
+                    `;
+                    tbody.insertBefore(newRow, tbody.firstChild);
+
+                    totalLiters += parseFloat(entry.quantity);
+                    totalEarnings += parseFloat(entry.totalAmount);
+                });
+
+                if(data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-400 font-medium">No milk deposits found yet.</td></tr>`;
+                }
+
+                document.getElementById('total-milk').innerHTML = totalLiters.toFixed(1) + ' <span class="text-sm font-medium text-gray-400">Ltr</span>';
+                document.getElementById('total-money').innerText = "₹ " + totalEarnings.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            })
+            .catch(error => {
+                console.error('Error fetching farmer data:', error);
+                document.getElementById('farmer-entries').innerHTML = `<tr><td colspan="6" class="py-10 text-center text-red-400 font-medium">Server connection failed.</td></tr>`;
+            });
+        });
+
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "login.html";
+        }
+
+        const translations = {
+            "en": {
+                navDashboard: "Milk History", navPayments: "Reports & Analytics", navProfile: "Farmer Profile", navSettings: "Settings", navSupport: "Support", btnLogout: "Logout",
+                companyName: "Washishti Milk & Milk Products Pvt. Ltd.", roleText: "Farmer", welcomeSub: "Here is your personal milk supply summary.",
+                totalMilkLabel: "Total Milk Supplied", totalEarningsLabel: "Total Earnings", historyTitle: "My Deposit History",
+                colDate: "Date", colType: "Milk Type", colQty: "Quantity (L)", colRate: "Rate (₹)", colTotal: "Total (₹)"
+            },
+            "mr": {
+                navDashboard: "दूध इतिहास", navPayments: "अहवाल आणि विश्लेषण", navProfile: "शेतकरी प्रोफाइल", navSettings: "सेटिंग्ज", navSupport: "समर्थन", btnLogout: "लॉगआउट",
+                companyName: "वाशिष्ठी दूध आणि दुग्धजन्य पदार्थ प्रा. लि.", roleText: "शेतकरी", welcomeSub: "येथे आपला वैयक्तिक दूध पुरवठा गोषवारा आहे.",
+                totalMilkLabel: "एकूण दूध पुरवठा", totalEarningsLabel: "एकूण कमाई", historyTitle: "माझा जमा इतिहास",
+                colDate: "तारीख", colType: "दुधाचा प्रकार", colQty: "प्रमाण (L)", colRate: "दर (₹)", colTotal: "एकूण (₹)"
+            }
+        };
+
+        document.getElementById('language-toggle').addEventListener('change', function(e) {
+            const lang = e.target.value;
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+            });
+
+            const username = localStorage.getItem("loggedInUser") || "User";
+            const welcomeEl = document.getElementById('welcome-message');
+            if(lang === 'mr') {
+                welcomeEl.innerText = "आपले स्वागत आहे, " + username + "!";
+            } else {
+                welcomeEl.innerText = "Welcome, " + username + "!";
+            }
+        });
+
+        setTimeout(() => {
+            document.getElementById('language-toggle').dispatchEvent(new Event('change'));
+        }, 100);
+    </script>
+</body>
+</html>

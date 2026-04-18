@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Settings</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+    </style>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner">
+                <img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain">
+            </div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+        
+        <nav class="mt-6 px-4 space-y-2 flex-1">
+            <a href="collection.html" class="flex items-center px-4 py-3 hover:bg-blue-800 text-white/80 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-flask w-6 text-center"></i> <span data-translate="navCollection">Milk Collection</span>
+            </a>
+            <a href="collectionFarmers.html" class="flex items-center px-4 py-3 hover:bg-blue-800 text-white/80 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-users w-6 text-center"></i> <span data-translate="navFarmers">Farmer Mgt</span>
+            </a>
+            <a href="collection_reports.html" class="flex items-center px-4 py-3 hover:bg-blue-800 text-white/80 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-chart-line w-6 text-center"></i> <span data-translate="navReports">Report & Analysis</span>
+            </a>
+            <a href="collection_support.html" class="flex items-center px-4 py-3 hover:bg-blue-800 text-white/80 hover:text-white rounded-lg transition-colors">
+                <i class="fa-solid fa-headset w-6 text-center"></i> <span data-translate="navSupport">Support</span>
+            </a>
+            
+            <a href="collection_settings.html" class="flex items-center px-4 py-3 bg-blue-900 text-white font-bold rounded-lg shadow-inner">
+                <i class="fa-solid fa-gear w-6 text-center"></i> <span data-translate="navSettings">Settings</span>
+            </a>
+        </nav>
+        
+        <div class="p-4 border-t border-white/10 bg-black/5 text-center text-xs text-white/50">
+            &copy; 2024 Washishti
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0 sticky top-0">
+            <div class="flex items-center gap-4">
+                <div class="w-1 h-8 bg-[#1565C0] rounded-full hidden sm:block"></div>
+                <h1 class="text-lg font-bold text-[#1565C0] italic tracking-tight hidden sm:block" data-translate="companyName">Washishti Milk & Milk Products Pvt. Ltd.</h1>
+                <button class="md:hidden text-slate-500 text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
+            
+            <div class="flex items-center gap-4 sm:gap-6">
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-[#1565C0] focus:border-[#1565C0] block p-2 outline-none font-medium cursor-pointer shadow-sm">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                </select>
+                
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-4 sm:pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Operator</p>
+                        <p class="text-sm font-bold text-slate-700" id="header-username">Center #42</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full max-w-4xl mx-auto pb-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6" data-translate="settingsTitle">Center Configurations</h2>
+
+            <div class="bg-white p-8 rounded-2xl border-y border-r border-l-4 border-l-[#1565C0] border-y-slate-200 border-r-slate-200 shadow-sm mb-6">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2" data-translate="profileSettings">
+                    <i class="fas fa-building text-[#1565C0]"></i> Center Profile
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1" data-translate="centerId">Center ID</label>
+                        <input type="text" id="profileId" disabled class="w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 cursor-not-allowed shadow-inner">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1" data-translate="managerName">Mobile Number</label>
+                        <input type="text" id="profileMobile" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none transition-all">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-1" data-translate="villageLoc">Village / Location</label>
+                        <input type="text" id="profileAddress" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#1565C0] outline-none transition-all">
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-4 border-t border-slate-100 flex justify-end">
+                    <button type="button" id="saveProfileBtn" class="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 transform hover:-translate-y-0.5">
+                        <i class="fas fa-save"></i> <span data-translate="saveChanges">Save Profile</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl border-y border-r border-l-4 border-l-[#febd69] border-y-slate-200 border-r-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2" data-translate="hardwarePrefs">
+                    <i class="fas fa-server text-[#febd69]"></i> Hardware & Preferences
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
+                        <div>
+                            <p class="font-bold text-slate-800" data-translate="machineLink">Fat Analyzer Linking</p>
+                            <p class="text-xs text-gray-500 mt-1">Machine ID: FA-9982 (Connected <i class="fa-solid fa-circle-check text-green-500 ml-1"></i>)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const username = localStorage.getItem("username") || "Center Operator";
+            document.getElementById('header-username').innerText = username;
+            document.getElementById('profileId').value = username;
+
+            // Fetch current profile
+            try {
+                const res = await fetch(`https://washishti-api.onrender.com/api/users/${username}`);
+                if(res.ok) {
+                    const data = await res.json();
+                    document.getElementById('profileMobile').value = data.mobile || "";
+                    document.getElementById('profileAddress').value = data.address || "";
+                }
+            } catch(e) {}
+        });
+
+        // Save Profile Logic
+        document.getElementById('saveProfileBtn').addEventListener('click', async function() {
+            const btn = this;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            try {
+                const res = await fetch('https://washishti-api.onrender.com/api/users/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: localStorage.getItem("username"),
+                        mobile: document.getElementById('profileMobile').value,
+                        address: document.getElementById('profileAddress').value
+                    })
+                });
+                if(res.ok) alert("Profile Saved!");
+            } catch(e) {
+                alert("Error saving profile");
+            } finally {
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Profile';
+            }
+        });
+
+        const translations = {
+            "en": { companyName: "Washishti Milk & Milk Products Pvt. Ltd.", navCollection: "Milk Collection", navFarmers: "Farmer Mgt", navReports: "Report & Analysis", navSupport: "Support", navSettings: "Settings", settingsTitle: "Center Configurations", profileSettings: "Center Profile", centerId: "Center ID", managerName: "Mobile Number", villageLoc: "Village / Location", hardwarePrefs: "Hardware & Preferences", machineLink: "Fat Analyzer Linking", saveChanges: "Save Profile" },
+            "mr": { companyName: "वाशिष्ठी दूध आणि दुग्धजन्य पदार्थ प्रा. लि.", navCollection: "दूध संकलन", navFarmers: "शेतकरी व्यवस्थापन", navReports: "अहवाल आणि विश्लेषण", navSupport: "समर्थन", navSettings: "सेटिंग्ज", settingsTitle: "केंद्र कॉन्फिगरेशन", profileSettings: "केंद्र प्रोफाइल", centerId: "केंद्र आयडी", managerName: "मोबाईल क्रमांक", villageLoc: "गाव / ठिकाण", hardwarePrefs: "हार्डवेअर आणि प्राधान्ये", machineLink: "फॅट विश्लेषक लिंकिंग", saveChanges: "प्रोफाइल जतन करा" }
+        };
+
+        document.getElementById('language-toggle').addEventListener('change', function(e) {
+            const lang = e.target.value;
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Retail Store</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        .variant-scroll::-webkit-scrollbar { width: 4px; }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .custom-checkbox { accent-color: #1565C0; width: 1.1rem; height: 1.1rem; cursor: pointer; }
+        .qty-wrapper { display: none; opacity: 0; transition: opacity 0.3s ease-in; }
+        .variant-row.active .qty-wrapper { display: flex; opacity: 1; }
+        #cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 25px rgba(0,0,0,0.1); }
+    </style>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <aside id="sidebar" class="w-64 bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white flex flex-col shadow-2xl z-30 fixed md:relative h-full transition-transform -translate-x-full md:translate-x-0 flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner">
+                <img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain" onerror="this.src='https://placehold.co/40x40?text=W'"> 
+            </div>
+            <div>
+                <span class="font-bold tracking-wide text-lg leading-none block">Washishti</span>
+                <span class="text-xs text-blue-200">Online Customers</span>
+            </div>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2 flex-1 overflow-y-auto">
+            <a href="OnlineCustomers.html" class="flex items-center gap-3 px-4 py-3 bg-blue-900 text-[#febd69] font-bold rounded-lg border-l-4 border-[#febd69] shadow-lg transition-all duration-200">
+                <i class="fa-solid fa-cart-shopping w-5 text-center"></i> 
+                <span data-translate="navOrders">Retail Store</span>
+            </a>
+            <a href="Online_profiles.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-[#febd69] rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-user w-5 text-center"></i> 
+                <span data-translate="navProfile">Customer Profile</span>
+            </a>
+            <a href="online_myorders.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-[#febd69] rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-list-ul w-5 text-center"></i> 
+                <span data-translate="navMyOrders">My Orders</span>
+            </a>
+            <div class="border-t border-white/10 my-4 mx-2"></div>
+            <a href="online_reports.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-[#febd69] rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-chart-simple w-5 text-center"></i> 
+                <span data-translate="navReports">Reports & Analytics</span>
+            </a>
+            <a href="online_settings.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-[#febd69] rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-gear w-5 text-center"></i> 
+                <span data-translate="navSettings">Settings</span>
+            </a>
+            <a href="online_support.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-[#febd69] rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-headset w-5 text-center"></i> 
+                <span data-translate="navSupport">Support</span>
+            </a>
+        </nav>
+
+        <div class="p-4 mt-auto border-t border-white/10 bg-black/5">
+            <button onclick="localStorage.removeItem('username'); window.location.href='login.html';" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span data-translate="btnLogout">Secure Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 sticky top-0">
+            <div class="flex items-center gap-4 flex-1">
+                <div class="w-1 h-8 bg-[#1565C0] rounded-full hidden lg:block"></div>
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 text-2xl"><i class="fas fa-bars"></i></button>
+                <h1 class="text-xl font-bold text-[#1565C0] italic hidden lg:block" data-translate="headerTitle">Washishti Retail Store</h1>
+            </div>
+
+            <div class="hidden sm:flex justify-center flex-1 px-4 w-full">
+                <div class="relative w-full max-w-xl group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-gray-400 group-focus-within:text-[#1565C0] transition-colors text-sm"></i>
+                    </div>
+                    <input type="text" id="product-search" placeholder="Search fresh milk, paneer, ghee..." onkeyup="searchProducts()" class="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-sm outline-none focus:ring-2 focus:ring-[#1565C0] focus:bg-white transition-all shadow-sm">
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-end gap-4 flex-1">
+                <div class="flex items-center border-r border-slate-200 pr-4">
+                    <button onclick="toggleCart()" class="relative flex items-center gap-2 group cursor-pointer hover:bg-blue-50 p-2 rounded-lg transition-colors">
+                        <div class="relative">
+                            <i class="fas fa-shopping-cart text-2xl text-slate-700 group-hover:text-[#1565C0] transition-colors"></i>
+                            <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-[#febd69] text-slate-900 border-2 border-white rounded-full text-[10px] w-5 h-5 flex items-center justify-center font-bold shadow-sm">0</span>
+                        </div>
+                        <div class="text-left hidden sm:block ml-1">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none" data-translate="cartTitle">Your Basket</p>
+                            <p class="text-sm font-bold text-[#1565C0] leading-none mt-1" data-translate="cartSub">Review Order</p>
+                        </div>
+                    </button>
+                </div>
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-[#1565C0] outline-none font-medium cursor-pointer shadow-sm p-2">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full pb-32">
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row justify-between md:items-center gap-4 relative overflow-hidden border-l-4 border-l-[#febd69]">
+                <div class="pl-2">
+                    <h2 class="text-2xl font-bold text-[#1565C0]" id="welcome-msg" data-translate="bannerTitle">Direct Home Delivery</h2>
+                    <p class="text-sm text-slate-500 mt-1 font-medium uppercase tracking-wider text-[11px]" data-translate="bannerSub">Fresh milk, paneer, and sweets delivered straight from our farm to your door.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="filter-container">
+                <button class="filter-btn active bg-[#1565C0] text-white border-[#1565C0] px-4 py-2 rounded-lg border shadow-sm text-sm font-bold transition-colors" onclick="filterProducts('All', this)" data-translate="filterAll">All Products</button>
+                <button class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-lg border shadow-sm text-sm font-bold hover:bg-slate-50 transition-colors" onclick="filterProducts('Liquid', this)" data-translate="filterMilk">Milk & Liquids</button>
+                <button class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-lg border shadow-sm text-sm font-bold hover:bg-slate-50 transition-colors" onclick="filterProducts('CurdPaneer', this)" data-translate="filterCurd">Curd & Paneer</button>
+                <button class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-lg border shadow-sm text-sm font-bold hover:bg-slate-50 transition-colors" onclick="filterProducts('Ghee', this)" data-translate="filterGhee">Pure Ghee</button>
+                <button class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-lg border shadow-sm text-sm font-bold hover:bg-slate-50 transition-colors" onclick="filterProducts('Sweets', this)" data-translate="filterSweets">Sweets & Desserts</button>
+                <button class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-lg border shadow-sm text-sm font-bold hover:bg-slate-50 transition-colors" onclick="filterProducts('IceCream', this)" data-translate="filterIceCream">Ice Creams</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6" id="product-grid">
+                
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group relative overflow-hidden transition-transform hover:-translate-y-1" data-category="Liquid" data-product="Washishti Fresh Milk">
+                    <div class="absolute top-3 right-3 bg-blue-50 text-[#1565C0] text-[10px] font-bold px-2 py-1 rounded border border-blue-100 z-10">Bestseller</div>
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="milk.png" alt="Milk" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Milk'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Washishti Fresh Milk</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 ml <span class="text-orange-500 font-black ml-1">₹27</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 ml" data-price="27" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">1000 ml <span class="text-orange-500 font-black ml-1">₹72</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="1000 ml" data-price="72" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">5000 ml <span class="text-orange-500 font-black ml-1">₹370</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="5000 ml" data-price="370" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Liquid" data-product="Taak">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="taak.png" alt="Taak" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Taak'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Fresh Taak</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Plain <span class="text-orange-500 font-black ml-1">₹15</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Plain" data-price="15" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Masala <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Masala" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Liquid" data-product="Lassi">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="lassi.png" alt="Lassi" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Lassi'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Fresh Lassi</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Sweet <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Sweet Lassi" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Mango <span class="text-orange-500 font-black ml-1">₹30</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Mango Lassi" data-price="30" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Liquid" data-product="Smoothy">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="smoothy.png" alt="Smoothy" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Smoothy'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Smoothy</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Vanilla <span class="text-orange-500 font-black ml-1">₹15</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Vanilla" data-price="15" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Others <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Others" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Liquid" data-product="Flavoured Milk">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="flamilk.png" alt="Flavoured Milk" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Milk'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Flavoured Milk</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Bottle <span class="text-orange-500 font-black ml-1">₹29</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard Bottle" data-price="29" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="CurdPaneer" data-product="Malai Paneer">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="paneer.png" alt="Paneer" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Paneer'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Premium Malai Paneer</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">100 gm <span class="text-orange-500 font-black ml-1">₹44</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="100 gm" data-price="44" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">200 gm <span class="text-orange-500 font-black ml-1">₹83</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="200 gm" data-price="83" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 gm <span class="text-orange-500 font-black ml-1">₹195</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 gm" data-price="195" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">1000 gm <span class="text-orange-500 font-black ml-1">₹380</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="1000 gm" data-price="380" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="CurdPaneer" data-product="Dahi">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50/50 transition-colors">
+                        <img src="dahi.png" alt="Dahi" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Dahi'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Fresh Dahi</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">80 gm <span class="text-orange-500 font-black ml-1">₹10</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="80 gm" data-price="10" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">150 gm <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="150 gm" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">200 gm <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="200 gm" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">2 KG <span class="text-orange-500 font-black ml-1">₹220</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="2 KG" data-price="220" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Ghee" data-product="Pure Cow Ghee">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="ghee.png" alt="Ghee" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Ghee'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Pure Cow Ghee (Danedar)</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">100 ml <span class="text-orange-500 font-black ml-1">₹80</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="100 ml" data-price="80" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">200 ml <span class="text-orange-500 font-black ml-1">₹146</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="200 ml" data-price="146" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 ml <span class="text-orange-500 font-black ml-1">₹345</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 ml" data-price="345" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">1000 ml <span class="text-orange-500 font-black ml-1">₹680</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="1000 ml" data-price="680" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Shrikhand">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="shrikhand.png" alt="Shrikhand" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Shrikhand'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Creamy Shrikhand</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">100 gm <span class="text-orange-500 font-black ml-1">₹32</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="100 gm" data-price="32" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">250 gm <span class="text-orange-500 font-black ml-1">₹70</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="250 gm" data-price="70" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 gm <span class="text-orange-500 font-black ml-1">₹135</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 gm" data-price="135" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Aamrakhand">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="aamrkhnd.png" alt="Aamrakhand" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Aamrakhand'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Aamrakhand</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">150 gm <span class="text-orange-500 font-black ml-1">₹40</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="150 gm" data-price="40" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">250 gm <span class="text-orange-500 font-black ml-1">₹75</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="250 gm" data-price="75" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 gm <span class="text-orange-500 font-black ml-1">₹145</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 gm" data-price="145" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Basundi">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="basundi.png" alt="Basundi" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Basundi'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Basundi</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">250 gm <span class="text-orange-500 font-black ml-1">₹65</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="250 gm" data-price="65" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">500 gm <span class="text-orange-500 font-black ml-1">₹125</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="500 gm" data-price="125" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Khoa">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="khva.png" alt="Khoa" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Khoa'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Khoa (250 gm)</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Pack <span class="text-orange-500 font-black ml-1">₹95</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="250 gm Pack" data-price="95" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Pedhe">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="khavapedhe.png" alt="Pedhe" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Pedhe'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Pedhe</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Box <span class="text-orange-500 font-black ml-1">₹110</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard Box" data-price="110" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Mango Burphi">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="ambaburphi.png" alt="Mango Burphi" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Burphi'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Mango Burphi</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Box <span class="text-orange-500 font-black ml-1">₹130</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard Box" data-price="130" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="Sweets" data-product="Modak">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-orange-50/50 transition-colors">
+                        <img src="modak.png" alt="Modak" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Modak'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Modak</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-blue-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Box <span class="text-orange-500 font-black ml-1">₹130</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard Box" data-price="130" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Ice Cream Tubs">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="mothadabba.png" alt="Tubs" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Tubs'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Ice Cream Tubs</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Standard <span class="text-orange-500 font-black ml-1">₹160</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard" data-price="160" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Premium <span class="text-orange-500 font-black ml-1">₹180</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Premium" data-price="180" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Exotic <span class="text-orange-500 font-black ml-1">₹200</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Exotic" data-price="200" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Family Pack">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="fampack.png" alt="Family Pack" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Pack'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Family Pack</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Variant A <span class="text-orange-500 font-black ml-1">₹200</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Variant A" data-price="200" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Variant B <span class="text-orange-500 font-black ml-1">₹260</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Variant B" data-price="260" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Variant C <span class="text-orange-500 font-black ml-1">₹280</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Variant C" data-price="280" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Variant D <span class="text-orange-500 font-black ml-1">₹310</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Variant D" data-price="310" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Ice Cream Cones">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="kon.png" alt="Cones" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Cones'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Ice Cream Cones</h3>
+                    <div class="mt-auto space-y-2 mb-5 variant-scroll overflow-y-auto max-h-40 pr-2">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Small <span class="text-orange-500 font-black ml-1">₹15</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Small" data-price="15" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Medium <span class="text-orange-500 font-black ml-1">₹20</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Medium" data-price="20" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Large <span class="text-orange-500 font-black ml-1">₹30</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Large" data-price="30" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Jumbo <span class="text-orange-500 font-black ml-1">₹45</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Jumbo" data-price="45" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Ice Cream Cups">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="dabba.png" alt="Cups" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Cups'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Ice Cream Cups</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Regular <span class="text-orange-500 font-black ml-1">₹10</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Regular" data-price="10" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Large <span class="text-orange-500 font-black ml-1">₹15</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Large" data-price="15" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Candy">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="candy.png" alt="Candy" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Candy'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Candy</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Stick <span class="text-orange-500 font-black ml-1">₹10</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Standard Stick" data-price="10" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 product-card border border-slate-200 shadow-sm flex flex-col group transition-transform hover:-translate-y-1" data-category="IceCream" data-product="Exotic Cups">
+                    <div class="h-36 flex items-center justify-center mb-5 p-2 bg-slate-50 rounded-xl group-hover:bg-purple-50/50 transition-colors">
+                        <img src="bigdabba.png" alt="Exotic Cups" class="max-h-full object-contain group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/100x100?text=Cups'">
+                    </div>
+                    <h3 class="product-title text-base font-bold text-slate-800 border-b border-slate-100 pb-3 mb-3">Exotic Cups</h3>
+                    <div class="mt-auto space-y-2 mb-5">
+                        <div class="variant-row flex items-center justify-between p-2 hover:bg-purple-50/50 rounded-lg border border-transparent transition-all">
+                            <label class="flex items-center gap-3 cursor-pointer flex-grow select-none"><input type="checkbox" class="custom-checkbox variant-check" onchange="toggleQtyInput(this)"><span class="text-sm font-semibold text-slate-700">Cup <span class="text-orange-500 font-black ml-1">₹55</span></span></label>
+                            <div class="qty-wrapper items-center gap-2"><input type="number" min="1" value="1" data-variant="Exotic Cup" data-price="55" class="w-14 border border-slate-300 rounded-md text-center p-1 focus:outline-none focus:border-blue-500"></div>
+                        </div>
+                    </div>
+                    <button onclick="addSelectedToCart(this)" class="w-full bg-[#febd69] hover:bg-orange-400 text-slate-900 text-xs py-3 rounded-xl shadow-sm font-bold uppercase transition-all"><i class="fas fa-cart-plus mr-1"></i> Add to Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-sm bg-white z-50 translate-x-full flex flex-col border-l border-slate-200 shadow-2xl transition-transform duration-300" style="max-width: 400px;">
+        <div class="p-6 border-b border-slate-100 bg-white flex justify-between items-center shadow-sm z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-50 text-[#1565C0] flex items-center justify-center text-lg"><i class="fas fa-shopping-basket"></i></div>
+                <h2 class="text-xl font-bold text-slate-800" data-translate="cartDrawerTitle">Your Basket</h2>
+            </div>
+            <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center transition-colors"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div id="cart-items-container" class="flex-grow overflow-y-auto p-6 flex flex-col gap-4 bg-slate-50">
+            <div id="empty-cart-msg" class="text-center mt-32 flex flex-col items-center">
+                <div class="w-24 h-24 rounded-full bg-slate-200 flex items-center justify-center text-4xl text-slate-400 mb-4"><i class="fas fa-box-open"></i></div>
+                <p class="text-slate-500 font-medium text-lg" data-translate="emptyCartMsg">Your basket is empty.</p>
+            </div>
+        </div>
+        
+        <div class="p-6 border-t border-slate-200 bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-10">
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Delivery Address (Required)</label>
+                <textarea id="delivery-address" rows="2" class="w-full text-sm p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-[#1565C0] resize-none" placeholder="Apt, Street, Landmark..."></textarea>
+            </div>
+            <div class="flex justify-between items-center mb-5">
+                <span class="text-sm font-bold text-slate-500 uppercase tracking-wider" data-translate="totalPayable">Total Payable</span>
+                <span id="cart-total" class="text-3xl font-black text-orange-500">₹ 0.00</span>
+            </div>
+            <button id="checkout-btn" onclick="processRetailCheckout()" class="w-full bg-[#1565C0] text-white py-4 rounded-xl font-bold uppercase tracking-widest shadow-md hover:bg-[#0D47A1] transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2">
+                <i class="fas fa-lock"></i> <span data-translate="btnConfirm">Pay & Place Order</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden z-40 transition-opacity"></div>
+
+    <script>
+        const currentCustomer = localStorage.getItem("loggedInUser");
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!currentCustomer) {
+                alert("Please log in to place an order.");
+                window.location.href = "login.html";
+            }
+        });
+
+        // UI Logic
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); document.getElementById('overlay').classList.toggle('hidden'); }
+        function toggleQtyInput(checkboxElem) {
+            const row = checkboxElem.closest('.variant-row');
+            checkboxElem.checked ? row.classList.add('active') : row.classList.remove('active');
+        }
+
+        // Filtering & Search
+        function filterProducts(category, btnElem) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-[#1565C0]', 'text-white', 'border-[#1565C0]');
+                btn.classList.add('bg-white', 'text-gray-700', 'border');
+            });
+            btnElem.classList.remove('bg-white', 'text-gray-700', 'border');
+            btnElem.classList.add('active', 'bg-[#1565C0]', 'text-white', 'border-[#1565C0]');
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.display = (category === 'All' || card.getAttribute('data-category') === category) ? 'flex' : 'none';
+            });
+        }
+
+        function searchProducts() {
+            const input = document.getElementById('product-search').value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(card => {
+                const title = card.querySelector('.product-title').innerText.toLowerCase();
+                card.style.display = title.includes(input) ? 'flex' : 'none';
+            });
+        }
+
+        // Cart Logic
+        let cart = [];
+
+        function addSelectedToCart(buttonElem) {
+            const card = buttonElem.closest('.product-card');
+            const productName = card.getAttribute('data-product');
+            const checkedBoxes = card.querySelectorAll('.variant-check:checked');
+
+            if (checkedBoxes.length === 0) return alert("Select a variant first!");
+
+            let itemsAdded = false;
+
+            checkedBoxes.forEach(cb => {
+                const row = cb.closest('.variant-row');
+                const qtyInput = row.querySelector('input[type="number"]');
+                const qty = parseInt(qtyInput.value);
+                const variant = qtyInput.getAttribute('data-variant');
+                const price = parseFloat(qtyInput.getAttribute('data-price'));
+
+                if(qty > 0) {
+                    const existing = cart.find(i => i.product === productName && i.variant === variant);
+                    if (existing) existing.qty += qty;
+                    else cart.push({ product: productName, variant, price, qty });
+
+                    itemsAdded = true;
+                    cb.checked = false;
+                    row.classList.remove('active');
+                    qtyInput.value = 1;
+                }
+            });
+
+            if (itemsAdded) {
+                const originalText = buttonElem.innerHTML;
+                buttonElem.innerHTML = "<i class='fas fa-check mr-1'></i> Added";
+                buttonElem.classList.remove('bg-[#febd69]', 'hover:bg-orange-400', 'text-slate-900');
+                buttonElem.classList.add('bg-green-500', 'hover:bg-green-600', 'text-white'); 
+                setTimeout(() => { 
+                    buttonElem.innerHTML = originalText; 
+                    buttonElem.classList.add('bg-[#febd69]', 'hover:bg-orange-400', 'text-slate-900');
+                    buttonElem.classList.remove('bg-green-500', 'hover:bg-green-600', 'text-white'); 
+                }, 1000);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total');
+            const badge = document.getElementById('cart-count-badge');
+            
+            container.innerHTML = cart.length ? '' : `
+                <div id="empty-cart-msg" class="text-center mt-32 flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-slate-200 flex items-center justify-center text-4xl text-slate-400 mb-4"><i class="fas fa-box-open"></i></div>
+                    <p class="text-slate-500 font-medium text-lg" data-translate="emptyCartMsg">Your basket is empty.</p>
+                </div>`;
+            
+            let grandTotal = 0;
+            let totalQty = 0;
+
+            cart.forEach((item, index) => {
+                grandTotal += item.price * item.qty;
+                totalQty += item.qty;
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm";
+                div.innerHTML = `
+                    <div class="flex-1 pr-2">
+                        <p class="font-bold text-slate-800 text-sm leading-tight">${item.product}</p>
+                        <p class="text-xs font-semibold text-slate-500 mt-1">${item.variant} <span class="mx-1 text-slate-300">•</span> <span class="text-[#1565C0] bg-blue-50 px-2 py-0.5 rounded border border-blue-100">Qty: ${item.qty}</span></p>
+                    </div>
+                    <div class="text-right flex flex-col items-end gap-2 pl-2 border-l border-slate-100">
+                        <p class="text-base font-black text-orange-500">₹${(item.price * item.qty).toFixed(2)}</p>
+                        <button onclick="removeFromCart(${index})" class="text-[10px] text-red-500 hover:text-white bg-red-50 hover:bg-red-500 px-2 py-1 rounded transition-colors font-bold uppercase flex items-center gap-1 whitespace-nowrap">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </button>
+                    </div>`;
+                container.appendChild(div);
+            });
+
+            badge.innerText = totalQty;
+            totalEl.innerText = `₹ ${grandTotal.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
+
+        // Checkout & Payment
+       async function processRetailCheckout() {
+            if (cart.length === 0) return alert("Your basket is empty!");
+            const address = document.getElementById('delivery-address').value;
+            if (!address.trim()) return alert("Please enter your delivery address!");
+
+            const btn = document.getElementById('checkout-btn');
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Connecting to Bank..."; 
+            btn.disabled = true;
+
+            const totalAmt = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const summaryString = cart.map(item => `${item.qty}x ${item.product} (${item.variant})`).join(', ');
+            
+            try {
+                const res = await fetch('https://washishti-api.onrender.com/api/create-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: totalAmt })
+                });
+                
+                if(!res.ok) throw new Error("Java Server returned an error.");
+                const order = await res.json();
+
+                const options = {
+                    "key": "rzp_test_SXyFX6xQfwfF88", 
+                    "amount": order.amount,
+                    "currency": "INR",
+                    "name": "Washishti Dairy",
+                    "description": "Fresh Home Delivery",
+                    "image": "washishti milk_logo 2.png",
+                    "handler": async function (response) {
+                        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Saving Order...";
+                        const customerName = localStorage.getItem("loggedInUser") || "Guest Customer"; 
+                        
+                        try {
+                            const dbResponse = await fetch('https://washishti-api.onrender.com/api/retail-order', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    customerUsername: customerName,
+                                    itemsSummary: summaryString,
+                                    totalAmount: totalAmt,
+                                    deliveryAddress: address,
+                                    paymentStatus: "Paid - " + response.razorpay_payment_id
+                                })
+                            });
+                            
+                            if(dbResponse.ok) {
+                                alert("Payment Successful! Your order is placed.");
+                                cart = []; 
+                                document.getElementById('delivery-address').value = "";
+                                updateCartUI(); 
+                                toggleCart(); 
+                            }
+                        } catch(err) {
+                            alert("Payment succeeded, but failed to save order to database.");
+                        }
+
+                        btn.innerHTML = "<i class='fas fa-lock'></i> <span data-translate='btnConfirm'>Pay & Place Order</span>";
+                        btn.disabled = false;
+                    },
+                    "prefill": { "name": localStorage.getItem("loggedInUser") || "" },
+                    "theme": { "color": "#1565C0" }
+                };
+                
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response){
+                    alert("Payment Failed. Please try again.");
+                    btn.innerHTML = "<i class='fas fa-lock'></i> <span data-translate='btnConfirm'>Pay & Place Order</span>";
+                    btn.disabled = false;
+                });
+                rzp1.open();
+                
+            } catch (error) {
+                // SHOW THE REAL JAVASCRIPT ERROR NOW!
+                alert("SYSTEM ERROR: " + error.message);
+                btn.innerHTML = "<i class='fas fa-lock'></i> <span data-translate='btnConfirm'>Pay & Place Order</span>";
+                btn.disabled = false;
+            }
+        }
+        
+        // Translations
+        const translations = {
+            "en": { 
+                headerTitle: "Washishti Retail Store", navOrders: "Retail Store", navProfile: "Customer Profile", navMyOrders: "My Orders", navReports: "Reports & Analytics", navSettings: "Settings", navSupport: "Support", btnLogout: "Secure Logout",
+                bannerTitle: "Direct Home Delivery", bannerSub: "Fresh milk, paneer, and sweets delivered straight from our farm to your door.",
+                filterAll: "All Products", filterMilk: "Milk & Liquids", filterCurd: "Curd & Paneer", filterGhee: "Pure Ghee", filterSweets: "Sweets & Desserts", filterIceCream: "Ice Creams",
+                cartTitle: "Your Basket", cartSub: "Review Order", cartDrawerTitle: "Your Basket", emptyCartMsg: "Your basket is empty.", totalPayable: "Total Payable", btnConfirm: "Pay & Place Order" 
+            },
+            "mr": { 
+                headerTitle: "वाशिष्ठी रिटेल स्टोअर", navOrders: "रिटेल स्टोअर", navProfile: "ग्राहक प्रोफाइल", navMyOrders: "माझ्या ऑर्डर्स", navReports: "अहवाल आणि विश्लेषण", navSettings: "सेटिंग्ज", navSupport: "समर्थन", btnLogout: "सुरक्षित लॉगआउट",
+                bannerTitle: "थेट घरपोच वितरण", bannerSub: "ताजे दूध, पनीर आणि मिठाई थेट आमच्या शेतातून तुमच्या दारापर्यंत.",
+                filterAll: "सर्व उत्पादने", filterMilk: "दूध आणि द्रव", filterCurd: "दही आणि पनीर", filterGhee: "शुद्ध तूप", filterSweets: "मिठाई", filterIceCream: "आईस्क्रीम",
+                cartTitle: "तुमची बास्केट", cartSub: "ऑर्डर तपासा", cartDrawerTitle: "तुमची बास्केट", emptyCartMsg: "तुमची बास्केट रिकामी आहे.", totalPayable: "एकूण देय रक्कम", btnConfirm: "पेमेंट करा आणि ऑर्डर द्या" 
+            }
+        };
+
+        document.getElementById('language-toggle').addEventListener('change', (e) => {
+            const lang = e.target.value;
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            document.querySelectorAll('.product-card button').forEach(btn => {
+                if(btn.innerText.includes("Add to Cart") || btn.innerText.includes("कार्टमध्ये टाका")) {
+                    btn.innerHTML = lang === 'mr' ? "<i class='fas fa-cart-plus mr-1'></i> कार्टमध्ये टाका" : "<i class='fas fa-cart-plus mr-1'></i> Add to Cart";
+                }
+            });
+            // Update Cart Drop buttons if items exist
+            updateCartUI();
+        });
+    </script>
+</body>
+</html>

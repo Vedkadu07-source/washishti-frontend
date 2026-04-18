@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - My Orders</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brandBlue: '#1565C0', brandOrange: '#febd69', bgGray: '#f8fafc' } } } }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+    </style>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-gradient-to-b from-brandBlue to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner"><img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain"></div>
+            <div>
+                <span class="font-bold tracking-wide text-lg leading-none block">Washishti</span>
+                <span class="text-xs text-blue-200">Online Customers</span>
+            </div>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2 flex-1 overflow-y-auto">
+            <a href="OnlineCustomers.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-cart-shopping w-5 text-center"></i> <span data-translate="navStore">Retail Store</span>
+            </a>
+            <a href="Online_profiles.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-user w-5 text-center"></i> <span class="font-medium" data-translate="navProfile">Customer Profile</span>
+            </a>
+            <a href="online_myorders.html" class="flex items-center gap-3 px-4 py-3 bg-blue-900 text-brandOrange font-semibold rounded-lg border-l-4 border-brandOrange shadow-lg transition-all duration-200">
+                <i class="fa-solid fa-list-ul w-5 text-center"></i> <span data-translate="navMyOrders">My Orders</span>
+            </a>
+            <div class="border-t border-white/10 my-4 mx-2"></div>
+            <a href="online_reports.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-chart-simple w-5 text-center"></i> <span class="font-medium" data-translate="navReports">Reports & Analytics</span>
+            </a>
+            <a href="online_settings.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-gear w-5 text-center"></i> <span class="font-medium" data-translate="navSettings">Settings</span>
+            </a>
+            <a href="online_support.html" class="flex items-center gap-3 px-4 py-3 text-blue-100 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-headset w-5 text-center"></i> <span class="font-medium" data-translate="navSupport">Support</span>
+            </a>
+        </nav>
+
+        <div class="p-4 mt-auto border-t border-white/10 bg-black/5">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-red-500/30">
+                <i class="fas fa-sign-out-alt"></i> <span data-translate="btnLogout">Secure Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0 sticky top-0">
+            <div class="flex items-center gap-4 flex-1">
+                <div class="w-1 h-8 bg-brandBlue rounded-full hidden lg:block"></div>
+                <h1 class="text-xl font-bold text-brandBlue italic tracking-tight hidden lg:block" data-translate="headerTitle">Washishti Order Tracking</h1>
+                <button class="md:hidden text-slate-500 text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
+            
+            <div class="flex items-center justify-end gap-4 flex-1">
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brandBlue outline-none font-medium cursor-pointer shadow-sm p-2">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी</option>
+                </select>
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-4 sm:pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-translate="roleText">Customer</p>
+                        <p class="text-sm font-bold text-brandBlue" id="header-username">User</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-brandBlue shadow-sm">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full max-w-[1200px] mx-auto pb-32">
+            <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800" data-translate="pageTitle">My Orders</h2>
+                    <p class="text-sm text-slate-500 mt-1" data-translate="pageSub">Track your recent purchases and view order history.</p>
+                </div>
+            </div>
+
+            <div id="orders-container" class="space-y-6">
+                <div class="text-center mt-10"><i class="fas fa-spinner fa-spin text-2xl text-slate-400"></i> Fetching your orders...</div>
+            </div>
+        </div>
+    </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const username = localStorage.getItem("username") || "Valued Customer";
+        document.getElementById('header-username').innerText = username;
+
+        // FETCH FROM BACKEND
+        try {
+            const response = await fetch(`https://washishti-api.onrender.com/api/retail-orders/${username}`);
+            const container = document.getElementById('orders-container');
+            
+            if (response.ok) {
+                const orders = await response.json();
+                container.innerHTML = ""; 
+                
+                if (orders.length === 0) {
+                    container.innerHTML = `<div class="text-center mt-10 text-slate-500 font-medium border-2 border-dashed border-slate-200 p-10 rounded-xl">You have no past orders.</div>`;
+                    return;
+                }
+
+                orders.forEach(order => {
+                    // Logic to determine color depending on Order Status
+                    let borderClass = 'border-l-brandBlue';
+                    let statusBadge = `bg-blue-50 text-blue-700 border-blue-200`;
+                    
+                    if(order.status.includes('Delivered')) {
+                        borderClass = 'border-l-green-500';
+                        statusBadge = `bg-green-50 text-green-700 border-green-200`;
+                    } else if (order.status.includes('Cancel')) {
+                        borderClass = 'border-l-red-500 opacity-75';
+                        statusBadge = `bg-red-50 text-red-600 border-red-200`;
+                    } else {
+                        borderClass = 'border-l-brandOrange';
+                        statusBadge = `bg-orange-50 text-orange-700 border-orange-200`;
+                    }
+
+                    // Create the beautiful card dynamically
+                    const orderHTML = `
+                        <div class="bg-white rounded-2xl border-y border-r border-l-4 ${borderClass} border-y-slate-200 border-r-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-100 pb-4 mb-4 gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <h3 class="font-black text-lg text-slate-800">#ORD-${order.id}</h3>
+                                        <span class="${statusBadge} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border">${order.status}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 font-semibold">Placed on ${new Date(order.orderDate).toLocaleString()}</p>
+                                </div>
+                                <div class="text-left md:text-right">
+                                    <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Total</p>
+                                    <p class="text-xl font-black text-brandBlue">₹ ${order.totalAmount.toFixed(2)}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col md:flex-row justify-between gap-6">
+                                <div class="flex-1 space-y-3">
+                                    <p class="text-sm font-bold text-slate-700 border-b border-slate-50 pb-2">Items Summary:</p>
+                                    <p class="text-sm text-slate-600">${order.itemsSummary}</p>
+                                </div>
+                                <div class="flex flex-col gap-3 justify-end min-w-[200px]">
+                                    <p class="text-xs font-semibold text-slate-400">Payment: ${order.paymentStatus}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += orderHTML;
+                });
+            } else {
+                container.innerHTML = `<div class="text-center mt-10 text-red-500 font-medium">Failed to load orders.</div>`;
+            }
+        } catch (error) {
+            console.error("Error loading orders:", error);
+            document.getElementById('orders-container').innerHTML = `<div class="text-center mt-10 text-red-500 font-medium">Server offline. Cannot load orders.</div>`;
+        }
+    });
+
+    function logout() {
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+    }
+
+    const translations = {
+        "en": { headerTitle: "Washishti Order Tracking", navStore: "Retail Store", navProfile: "Customer Profile", navMyOrders: "My Orders", navReports: "Reports & Analytics", navSettings: "Settings", navSupport: "Support", btnLogout: "Secure Logout", roleText: "Customer", pageTitle: "My Orders", pageSub: "Track your recent purchases and view order history." },
+        "mr": { headerTitle: "वाशिष्ठी ऑर्डर ट्रॅकिंग", navStore: "रिटेल स्टोअर", navProfile: "ग्राहक प्रोफाइल", navMyOrders: "माझ्या ऑर्डर्स", navReports: "अहवाल आणि विश्लेषण", navSettings: "सेटिंग्ज", navSupport: "समर्थन", btnLogout: "सुरक्षित लॉगआउट", roleText: "ग्राहक", pageTitle: "माझ्या ऑर्डर्स", pageSub: "तुमच्या अलीकडील खरेदीचा मागोवा घ्या आणि ऑर्डर इतिहास पहा." }
+    };
+    
+    document.getElementById('language-toggle').addEventListener('change', function(e) {
+        const lang = e.target.value;
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+        });
+    });
+</script>
+</body>
+</html>

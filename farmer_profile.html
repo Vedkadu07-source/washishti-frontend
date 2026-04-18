@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Farmer Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brandBlue: '#1565C0', brandOrange: '#febd69', bgGray: '#f8fafc' } } } }
+    </script>
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+    <aside class="w-64 bg-gradient-to-b from-brandBlue to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner"><img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain"></div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+        <nav class="mt-6 px-4 space-y-2 flex-1">
+            <p class="px-4 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2 mt-4" data-translate="menuSection">Farmer Menu</p>
+            <a href="farmer_history.html" class="flex items-center gap-3 px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> <span class="font-medium" data-translate="navHistory">Milk History</span>
+            </a>
+            <a href="farmer_profile.html" class="flex items-center gap-3 px-4 py-3 bg-blue-900 text-brandOrange font-semibold rounded-lg border-l-4 border-brandOrange">
+                <i class="fa-solid fa-user-tractor w-5 text-center"></i> <span data-translate="navProfile">Farmer Profile</span>
+            </a>
+            <p class="px-4 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2 mt-6" data-translate="menuOther">More</p>
+            <a href="farmer_reports.html" class="flex items-center gap-3 px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> <span class="font-medium" data-translate="navReports">Reports & Analytics</span>
+            </a>
+            <a href="farmer_settings.html" class="flex items-center gap-3 px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-gear w-5 text-center"></i> <span class="font-medium" data-translate="navSettings">Settings</span>
+            </a>
+            <a href="farmer_support.html" class="flex items-center gap-3 px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-headset w-5 text-center"></i> <span class="font-medium" data-translate="navSupport">Support</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto border-t border-white/10 bg-black/5">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg">
+                <i class="fas fa-sign-out-alt"></i> <span data-translate="btnLogout">Secure Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0 sticky top-0">
+            <div class="flex items-center gap-4 flex-1">
+                <div class="w-1 h-8 bg-brandBlue rounded-full hidden lg:block"></div>
+                <h1 class="text-lg font-bold text-brandBlue italic tracking-tight hidden lg:block" data-translate="headerTitle">Washishti Farmer Identity</h1>
+            </div>
+            <div class="flex items-center justify-end gap-4 sm:gap-6 flex-1">
+                <select id="language-toggle" class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-brandBlue outline-none font-medium cursor-pointer p-2 shadow-sm">
+                    <option value="en">English</option>
+                    <option value="mr">मराठी</option>
+                </select>
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-4 sm:pl-6">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-translate="roleText">Farmer</p>
+                        <p class="text-sm font-bold text-brandBlue" id="header-username">User</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-brandBlue shadow-sm">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full max-w-[1200px] mx-auto pb-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6" data-translate="pageTitle">My Profile</h2>
+            
+            <div class="bg-gradient-to-r from-brandBlue to-[#0D47A1] rounded-2xl p-8 shadow-md text-white flex flex-col md:flex-row items-center gap-8 mb-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-tractor text-9xl"></i></div>
+                <div class="w-32 h-32 bg-white rounded-full p-1 shadow-lg z-10 flex-shrink-0">
+                    <div class="w-full h-full rounded-full bg-blue-50 text-brandBlue flex items-center justify-center text-4xl font-bold border-4 border-white">
+                        <span id="avatar-initials">U</span>
+                    </div>
+                </div>
+                <div class="z-10 flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-black mb-2" id="profile-name">User Name</h2>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 text-blue-100 text-sm font-medium mt-3">
+                        <span class="bg-black/10 px-3 py-1 rounded-full"><i class="fa-solid fa-id-card mr-1"></i> User Role: <span id="profile-role">...</span></span>
+                        <span class="bg-black/10 px-3 py-1 rounded-full"><i class="fa-solid fa-location-dot mr-1"></i> <span id="profile-address">...</span></span>
+                        <span class="bg-black/10 px-3 py-1 rounded-full"><i class="fa-solid fa-phone mr-1"></i> <span id="profile-mobile">...</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl border-y border-r border-l-4 border-l-brandBlue border-y-slate-200 border-r-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider" data-translate="lifetimeMilk">Lifetime Milk</p>
+                        <h3 class="text-3xl font-black text-slate-800 mt-2" id="stat-milk">0 <span class="text-sm text-gray-400">Ltrs</span></h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-blue-50 text-brandBlue flex items-center justify-center text-xl hidden sm:flex"><i class="fa-solid fa-jug-detergent"></i></div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border-y border-r border-l-4 border-l-green-500 border-y-slate-200 border-r-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider" data-translate="avgDaily">Avg. Daily</p>
+                        <h3 class="text-3xl font-black text-slate-800 mt-2" id="stat-daily">0 <span class="text-sm text-gray-400">Ltrs</span></h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-50 text-green-500 flex items-center justify-center text-xl hidden sm:flex"><i class="fa-solid fa-chart-area"></i></div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border-y border-r border-l-4 border-l-brandOrange border-y-slate-200 border-r-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider" data-translate="lifetimeEarnings">Earnings</p>
+                        <h3 class="text-3xl font-black text-green-600 mt-2" id="stat-earnings">₹ 0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-orange-50 text-brandOrange flex items-center justify-center text-xl hidden sm:flex"><i class="fa-solid fa-wallet"></i></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const username = localStorage.getItem("username") || "Farmer User";
+        document.getElementById('header-username').innerText = username;
+        const initials = username.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        document.getElementById('avatar-initials').innerText = initials || "U";
+
+        // 1. FETCH PROFILE DATA
+        try {
+            const userRes = await fetch(`https://washishti-api.onrender.com/api/users/${username}`);
+            if (userRes.ok) {
+                const userData = await userRes.json();
+                document.getElementById('profile-name').innerText = userData.username;
+                document.getElementById('profile-mobile').innerText = userData.mobile || "Add Mobile in Settings";
+                document.getElementById('profile-address').innerText = userData.address || "Add Address in Settings";
+                document.getElementById('profile-role').innerText = userData.role;
+            }
+        } catch (error) { console.error("Failed to load profile:", error); }
+
+        // 2. FETCH REPORTS DATA
+        try {
+            const reportRes = await fetch(`https://washishti-api.onrender.com/api/reports/farmer/${username}`);
+            if (reportRes.ok) {
+                const reportData = await reportRes.json();
+                document.getElementById('stat-milk').innerHTML = `${reportData.totalLiters} <span class="text-sm text-gray-400">Ltrs</span>`;
+                document.getElementById('stat-daily').innerHTML = `${reportData.avgDaily} <span class="text-sm text-gray-400">Ltrs</span>`;
+                document.getElementById('stat-earnings').innerText = `₹ ${reportData.totalEarnings.toLocaleString('en-IN')}`;
+            }
+        } catch (error) { console.error("Failed to load stats:", error); }
+    });
+
+    function logout() {
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+    }
+
+    const translations = {
+        "en": { headerTitle: "Washishti Farmer Identity", menuSection: "Farmer Menu", menuOther: "More", navHistory: "Milk History", navProfile: "Farmer Profile", navReports: "Reports & Analytics", navSettings: "Settings", navSupport: "Support", btnLogout: "Secure Logout", pageTitle: "My Profile", status: "Status", lifetimeMilk: "Lifetime Milk Supplied", avgDaily: "Avg. Daily Supply", lifetimeEarnings: "Lifetime Earnings", roleText: "Farmer" },
+        "mr": { headerTitle: "वाशिष्ठी शेतकरी ओळख", menuSection: "शेतकरी मेनू", menuOther: "इतर", navHistory: "दूध इतिहास", navProfile: "शेतकरी प्रोफाइल", navReports: "अहवाल आणि विश्लेषण", navSettings: "सेटिंग्ज", navSupport: "समर्थन", btnLogout: "सुरक्षित लॉगआउट", pageTitle: "माझे प्रोफाइल", status: "स्थिती", lifetimeMilk: "आतापर्यंत पुरवलेले एकूण दूध", avgDaily: "सरासरी दैनंदिन पुरवठा", lifetimeEarnings: "आतापर्यंतची एकूण कमाई", roleText: "शेतकरी" }
+    };
+    
+    document.getElementById('language-toggle').addEventListener('change', function(e) {
+        const lang = e.target.value;
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Washishti Dairy - Report & Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brandBlue: '#1565C0', brandOrange: '#febd69', bgGray: '#f8fafc' } } } }
+    </script>
+</head>
+<body class="bg-bgGray font-sans antialiased text-gray-800 flex h-screen overflow-hidden">
+
+    <div class="md:hidden bg-gray-900 text-white p-4 flex justify-between items-center shadow-md fixed w-full z-50">
+        <div class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-cow text-brandOrange"></i> Washishti Dairy</div>
+        <button id="mobile-menu-btn" class="text-white hover:text-brandOrange focus:outline-none"><i class="fa-solid fa-bars text-2xl"></i></button>
+    </div>
+
+    <aside class="w-64 bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white flex flex-col shadow-2xl z-20 hidden md:flex flex-shrink-0">
+        <div class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/5">
+            <div class="bg-white p-1 rounded-full shadow-inner"><img src="washishti milk_logo 2.png" alt="Logo" class="w-8 h-8 object-contain"></div>
+            <span class="font-bold tracking-wide text-lg">Washishti Dairy</span>
+        </div>
+
+        <nav class="mt-6 px-4 space-y-2">
+            <a href="franchise.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors"><i class="fa-solid fa-boxes-stacked w-6"></i> <span data-i18n="bulk_orders">Bulk Orders</span></a>
+            <a href="FranchiseHistory.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors"><i class="fa-solid fa-clock-rotate-left w-6"></i> <span data-i18n="my_orders">My Orders</span></a>
+            <a href="FranchiseReports.html" class="flex items-center px-4 py-3 bg-blue-900 text-brandOrange font-semibold rounded-lg border-l-4 border-brandOrange"><i class="fa-solid fa-chart-pie w-6"></i> <span data-i18n="reports">Report & Analysis</span></a>
+            <a href="FranchiseSupport.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors"><i class="fa-solid fa-headset w-6"></i> <span data-i18n="support">Support</span></a>
+            <a href="FranchiseSettings.html" class="flex items-center px-4 py-3 hover:bg-blue-800 hover:text-brandOrange rounded-lg transition-colors"><i class="fa-solid fa-gear w-6"></i> <span data-i18n="settings">Settings</span></a>
+        </nav>
+
+        <div class="p-4 mt-auto border-t border-gray-800 bg-black/10">
+            <button onclick="localStorage.removeItem('username'); window.location.href='login.html';" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-red-500/30">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="secure_logout">Secure Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative pt-16 md:pt-0">
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center justify-between px-6 lg:px-8 z-10 flex-shrink-0">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900" data-i18n="reports">Report & Analysis</h1>
+                <p class="text-gray-500 text-sm mt-1 hidden sm:block" data-i18n="reports_desc">Track your sales performance and top products.</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="relative flex items-center gap-2 mr-2 border-r pr-4 border-gray-300">
+                    <i class="fa-solid fa-language text-brandBlue text-xl"></i>
+                    <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-transparent text-sm font-semibold text-gray-700 focus:outline-none cursor-pointer">
+                        <option value="en">English</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-full border border-gray-200 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-brandBlue text-white flex items-center justify-center font-bold text-sm">F</div>
+                    <span class="font-medium text-sm hidden sm:block" id="header-username">Franchise</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 lg:p-10 w-full pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-chart-line text-6xl text-brandBlue"></i></div>
+                    <p class="text-gray-500 text-sm font-medium mb-1" data-i18n="monthly_revenue">Lifetime Revenue</p>
+                    <h3 class="text-3xl font-black text-gray-800" id="report-revenue">₹ 0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-box-open text-6xl text-brandOrange"></i></div>
+                    <p class="text-gray-500 text-sm font-medium mb-1" data-i18n="total_volume">Total Volume Sold</p>
+                    <h3 class="text-3xl font-black text-gray-800" id="report-volume">0 <span class="text-lg text-gray-500 font-medium">Items</span></h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-users text-6xl text-purple-600"></i></div>
+                    <p class="text-gray-500 text-sm font-medium mb-1" data-i18n="orders_placed">Total Orders Placed</p>
+                    <h3 class="text-3xl font-black text-gray-800" id="report-orders">0</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-gray-800" data-i18n="revenue_trends">Revenue Trends</h3>
+                    </div>
+                    
+                    <div id="revenue-chart-bars" class="h-64 flex items-end justify-between gap-3 border-b border-l border-gray-200 p-4 pt-8">
+                        <div class="w-full text-center text-slate-400 text-sm pb-10"><i class="fas fa-spinner fa-spin mr-2"></i> Analyzing your data...</div>
+                    </div>
+                    <div id="revenue-chart-labels" class="flex justify-between text-xs text-gray-400 mt-3 px-2 font-semibold uppercase tracking-wider">
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-6" data-i18n="top_products">Top Selling Products</h3>
+                    <div class="space-y-5">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center text-xl"><i class="fa-solid fa-bottle-droplet text-blue-500"></i></div>
+                                <div><p class="font-bold text-gray-800 text-sm" data-i18n="prod_cow_milk">Fresh Milk</p><p class="text-xs text-gray-500 font-medium">High Demand</p></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center text-xl"><i class="fa-solid fa-cheese text-brandOrange"></i></div>
+                                <div><p class="font-bold text-gray-800 text-sm" data-i18n="prod_paneer">Fresh Paneer</p><p class="text-xs text-gray-500 font-medium">Consistent</p></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-yellow-50 transition-colors border border-transparent hover:border-yellow-100">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center text-xl"><i class="fa-solid fa-jar text-yellow-500"></i></div>
+                                <div><p class="font-bold text-gray-800 text-sm" data-i18n="prod_ghee">Pure Ghee</p><p class="text-xs text-gray-500 font-medium">Premium</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const username = localStorage.getItem("username") || "Franchise";
+            document.getElementById("header-username").innerText = username;
+
+            // 1. FETCH SUMMARY STATS
+            try {
+                const response = await fetch(`https://washishti-api.onrender.com/api/reports/franchise/${username}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('report-revenue').innerText = '₹ ' + data.totalRevenue.toLocaleString('en-IN');
+                    document.getElementById('report-orders').innerText = data.totalOrders;
+                    document.getElementById('report-volume').innerHTML = `${data.totalVolume} <span class="text-lg text-gray-500 font-medium">Units</span>`;
+                }
+            } catch (error) {}
+
+            // 2. FETCH RAW ORDERS TO BUILD THE CHART
+            try {
+                const orderRes = await fetch(`https://washishti-api.onrender.com/api/orders/franchise/${username}`);
+                if (orderRes.ok) {
+                    const orders = await orderRes.json();
+                    
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const today = new Date();
+                    const last6Months = [];
+                    const revenues = [0, 0, 0, 0, 0, 0];
+
+                    for (let i = 5; i >= 0; i--) {
+                        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                        last6Months.push({ month: d.getMonth(), year: d.getFullYear(), name: monthNames[d.getMonth()] });
+                    }
+
+                    orders.forEach(order => {
+                        const itemDate = new Date(order.orderDate);
+                        const bucketIndex = last6Months.findIndex(b => b.month === itemDate.getMonth() && b.year === itemDate.getFullYear());
+                        if (bucketIndex !== -1) {
+                            revenues[bucketIndex] += order.totalAmount;
+                        }
+                    });
+
+                    const chartBars = document.getElementById('revenue-chart-bars');
+                    const chartLabels = document.getElementById('revenue-chart-labels');
+                    chartBars.innerHTML = ''; chartLabels.innerHTML = '';
+                    
+                    const maxRev = Math.max(...revenues) || 1;
+
+                    revenues.forEach((rev, index) => {
+                        const heightPct = Math.max((rev / maxRev) * 100, 5); 
+                        const formattedRev = rev >= 1000 ? (rev/1000).toFixed(1) + 'k' : rev.toFixed(0);
+                        const isLast = index === 5;
+                        const baseClass = isLast ? 'bg-brandBlue shadow-lg shadow-blue-500/40' : 'bg-blue-200 hover:bg-brandBlue';
+                        
+                        chartBars.innerHTML += `
+                            <div class="w-full ${baseClass} rounded-t-md transition-all relative group cursor-pointer" style="height: ${heightPct}%">
+                                <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs font-bold text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity">₹${formattedRev}</span>
+                            </div>
+                        `;
+                        chartLabels.innerHTML += `<span class="${isLast ? 'text-gray-800 font-bold' : ''}">${last6Months[index].name}</span>`;
+                    });
+                }
+            } catch (error) {
+                document.getElementById('revenue-chart-bars').innerHTML = '<div class="w-full text-center text-red-400 font-bold pb-10">Server Offline</div>';
+            }
+        });
+
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.querySelector('aside');
+        if(sidebar && btn) btn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
+
+        const translations = {
+            en: { "bulk_orders": "Bulk Orders", "my_orders": "My Orders", "reports": "Report & Analysis", "reports_desc": "Track your sales performance and top products.", "support": "Support", "settings": "Settings", "secure_logout": "Secure Logout", "monthly_revenue": "Lifetime Revenue", "total_volume": "Total Volume Sold", "orders_placed": "Total Orders Placed", "revenue_trends": "Revenue Trends", "top_products": "Top Selling Products", "prod_cow_milk": "Fresh Milk", "prod_paneer": "Fresh Paneer", "prod_ghee": "Pure Ghee" },
+            mr: { "bulk_orders": "घाऊक ऑर्डर्स", "my_orders": "माझ्या ऑर्डर्स", "reports": "अहवाल आणि विश्लेषण", "reports_desc": "तुमची विक्री कामगिरी आणि शीर्ष उत्पादने ट्रॅक करा.", "support": "समर्थन", "settings": "सेटिंग्ज", "secure_logout": "सुरक्षित लॉगआउट", "monthly_revenue": "आतापर्यंतचे उत्पन्न", "total_volume": "एकूण विक्री झालेले प्रमाण", "orders_placed": "एकूण दिलेल्या ऑर्डर्स", "revenue_trends": "उत्पन्न ट्रेंड", "top_products": "सर्वाधिक विकली जाणारी उत्पादने", "prod_cow_milk": "ताजे दूध", "prod_paneer": "ताजे पनीर", "prod_ghee": "शुद्ध तूप" }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+        }
+    </script>
+</body>
+</html>
